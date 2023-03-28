@@ -11,8 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginTest {
 
-    public static WebDriver driver;
     public static LoginPage loginPage;
+    public static HomePage homePage;
+    public static WebDriver driver;
 
     @BeforeClass
     public static void setup() {
@@ -23,11 +24,19 @@ public class LoginTest {
         driver.get(ConfProperties.getProperty("loginpage"));
 
         loginPage = new LoginPage(driver);
+        homePage = new HomePage(driver);
     }
 
     @Test
     public void loginTest() {
         loginPage.login(ConfProperties.getProperty("login"), ConfProperties.getProperty("password"));
-        Assert.assertEquals(ConfProperties.getProperty("expectedurl"),driver.getCurrentUrl());
+        String userName = homePage.getUserName();
+        // Проверяется имя пользователя в user menu
+        Assert.assertEquals(ConfProperties.getProperty("userName"), userName);
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        homePage.logout();
     }
 }

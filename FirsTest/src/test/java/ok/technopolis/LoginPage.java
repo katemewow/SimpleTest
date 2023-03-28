@@ -21,10 +21,13 @@ public class LoginPage {
     @FindBy(xpath = "//*[@id=\"field_password\"]")
     private WebElement passwdInput;
 
+    @FindBy(xpath = "//*[@class='button-pro __wide']")
+    private WebElement loginBtn;
+
     public void login(String login, String passwd) {
         loginInput.sendKeys(login);
         passwdInput.sendKeys(passwd);
-        passwdInput.sendKeys(Keys.ENTER);
+        loginBtn.click();
     }
 
 }
