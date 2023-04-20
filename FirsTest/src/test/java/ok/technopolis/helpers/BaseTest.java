@@ -1,30 +1,24 @@
 package ok.technopolis.helpers;
 
-import ok.technopolis.pages.HomePage;
-import ok.technopolis.pages.LoginPage;
-import ok.technopolis.pages.ProfilePage;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class PageBuilder {
-
+public class BaseTest {
     public static WebDriver driver = new FirefoxDriver();
 
-    public static LoginPage buildLoginPage() {
+    @BeforeClass
+    public static void setup() {
         System.setProperty("webdriver.chrome.driver", ConfProperties.getProperty("geckodriver"));
         driver.get(ConfProperties.getProperty("loginPageUrl"));
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        return new LoginPage(driver);
     }
 
-    public static HomePage buildHomePage() {
-        return new HomePage(driver);
+    @AfterClass
+    public static void tearDown() {
+        driver.quit();
     }
-
-    public static ProfilePage buildProfilePage() {
-        return new ProfilePage(driver);
-    }
-
 }

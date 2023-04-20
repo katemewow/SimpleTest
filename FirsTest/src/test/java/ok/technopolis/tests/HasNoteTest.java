@@ -1,35 +1,38 @@
 package ok.technopolis.tests;
 
-import ok.technopolis.App;
+import ok.technopolis.helpers.BaseTest;
 import ok.technopolis.helpers.TestBot;
+import ok.technopolis.pages.HomePage;
+import ok.technopolis.pages.LoginPage;
+import ok.technopolis.pages.ProfilePage;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
-public class HasNoteTest {
-    public static App app;
+public class HasNoteTest extends BaseTest {
+    public static LoginPage loginPage;
+    public static HomePage homePage;
+    public static ProfilePage profilePage;
     public static TestBot testBot;
-
-    @BeforeClass
-    public static void setup() {
-        app = new App();
-        testBot = new TestBot();
-        app.loginPage.login(testBot.getLogin(), testBot.getPassword());
-    }
 
     @Test
     @DisplayName("User writes a note")
     public void containsNote() {
-        app.profilePage.writeNote();
-        assertThat(app.profilePage.getCountNote(), greaterThan(0));
+        loginPage = new LoginPage(driver);
+        testBot = new TestBot();
+        homePage = loginPage.login(testBot.getLogin(), testBot.getPassword());
+        profilePage = homePage.toolbar.redirectToProfile();
+        int noteCount = profilePage
+                .writeNote()
+                .getNoteCount();
+        assertThat(noteCount, greaterThan(0));
     }
 
     @AfterClass
     public static void tearDown() {
-        app.homePage.logout();
+        homePage.logout();
     }
 }
